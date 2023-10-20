@@ -1,209 +1,221 @@
-# BLE Connection
+# Quick Start Guide: Secure Cloud Connectivity and Voice Control Demo for Microchip WFI32-IoT Board
 
-[Getting Started](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-17DABF04-E5D8-4201-A746-2FC244450A19)
+Devices: **| PIC32 WFI32E | WFI32 | Trust\&Go (ECC608) |**
 
-[Getting Started with Peripheral Building Blocks](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-B3B46369-F5B4-401B-8405-658BE34988F4)
+Features: **| Secure Cloud Connectivity | Voice Control |**
 
-[Legacy Advertisements](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-820CEA03-90AE-484F-87C9-9CF2CE652702) **--\>** [BLE Connection](#GUID-F9A0C390-C124-49A7-9F22-157D20BFBE5D) **--\>**[BLE Transparent UART](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-07EC83B7-CC28-4C55-8634-4B7F56A9DB36)
+[![Latest release](https://img.shields.io/github/v/release/MicrochipTech/WFI32-IoT?include_prereleases&sort=semver&style=for-the-badge)](https://github.com/MicrochipTech/WFI32-IoT/releases/latest)
 
-## Introduction {#INTRODUCTION .section}
+The WFI32-IoT board comes pre-programmed and configured for demonstrating the connectivity to the AWS Cloud IoT Core. The demo uses **AWS C SDK version 4.0** to establish MQTT connection to AWS broker, subscribe to cloud topic/s and publish to the cloud.
 
-This document will help users enable advertisements and connection on WBZ451 Curiosity board using MPLAB Code Configurator\(MCC\) BLE Advertisement is Broadcasting of small packets to peer devices. In BLE a peripheral device always starts with advertisements.Advertisement packets enable a central or observer to discover and connect to a peripheral.
+<p align="center">
+<img src="resources/media/board1.png" width="480"/>
+</p>
 
-Users of this document can choose to just run the precompiled Application Example hex file on the WBZ451 Curiosity Board and experience the demo or can go through the steps involved in developing this Application from scratch
+## Table of Contents
 
-These examples each build on top on one and other. We strongly recommend that you follow the examples in order, to learn the basics concepts before progressing to the more advanced topics.
+1. [Overview](#chapter1)
+	1. 	[Board Layout](#chapter1.1)
+	2.	[OOB Flow](#chapter1.2)
+	3.	[Switch Button Use Cases](#chapter1.3)
+2. [Getting Started](#chapter2)
+	1.	[Connecting the Board to the Host PC](#chapter2.1)
+	3.	[Connecting the Board to Wi-Fi Networks](#chapter2.2)
+		1. 	[Via WFI32-IoT Web page](#chapter2.2.1)
+		2. 	[Via Soft AP](#chapter2.2.2)
+	4.	[Visualizing Cloud Data in Real Time](#chapter2.3)
+	5.	[Voice Control](#chapter2.4)
+3. [User Commands](#chapter3)
+4. [Want To Know More?](#chapter4)
 
-## Recommended Reads {#RECOMMENDED-READS .section}
 
-1.  [BLE Software Specification](https://onlinedocs.microchip.com/pr/GUID-C5EAF60E-9124-427C-A0F1-F2DBE662EA92-en-US-2/index.html?GUID-222749FE-01C5-43B6-A5C7-CD82B3FC7F5F)
+## 1. Overview <a name="chapter1"></a>
 
-2.  [FreeRtos BLE App Initialize](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-AB1A02BF-4F9B-4058-90D9-02BFB3136682)
+### 1.1 Board Layout <a name="chapter1.1"></a>
+The WFI32-IoT board layout can be seen below.
 
-3.  [BLE Legacy Advertisements](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-820CEA03-90AE-484F-87C9-9CF2CE652702)
+### 1.2 OOB flow <a name="chapter1.2"></a>
 
+<img src="resources/media/leds.png" width="840"/>
 
-## Hardware Required {#HARDWARE-REQUIRED .section}
+If you have an [OLEDB Click board](https://www.mikroe.com/oled-b-click) connected to the WFI32-IoT board's Click interface, the OLED board will:
+1. Show **Wi-Fi icon/image** once board is Wi-Fi connected.
+2. Show additionally **Cloud icon/image** once board is Cloud connected.
 
-|**Tool**|**Qty**|
-|--------|-------|
-|WBZ451 Curiosity Board|1|
-|Micro USB cable|1|
+### 1.3 Switch Button Use Cases <a name="chapter1.3"></a>
+* **SW1** held during boot-up: Enter Soft AP mode (indicated by **Slow Blinking BLUE LED**).
+* **SW1 & SW2** held during boot-up: Use factory default configuration. Default Wi-Fi credentials are {**MCHP.IOT, microchip**}.
 
-## SDK Setup {#SDK-SETUP .section}
+---
 
-1.  [Getting started with Software Development](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-2AD37FE2-1915-4E34-9A05-79E3810726D7)
+## 2. Getting Started <a name="chapter2"></a>
 
+### 2.1 Connecting the Board to the Host PC <a name="chapter2.1"></a>
+1. Connect the WFI32-IoT board to a PC using a standard micro-USB cable. 
+2. The LED array will blink twice in the following order: **BLUE --> GREEN --> YELLOW --> RED**. 
+3. The board will appear as a removable storage device on the host PC
+4. Double-click on the **clickme.html** file to go to the demo webpage.
 
-## Software {#SOFTWARE .section}
 
-1.  [TeraTerm](https://ttssh2.osdn.jp/index.html.en)
+### 2.2 Connecting the Board to Wi-Fi Networks <a name="chapter2.2"></a>
 
+#### 2.2.1 Via WFI32-IoT Webpage <a name="chapter2.2.1"></a>
+<img src="resources/media/webpageWifiConnectionBox.png" width="480"/>
 
-## Smartphone App {#SMARTPHONE-APP .section}
+1. Scroll down the middle of the webpage. On the left, you will ses a **Wireless Network Login** panel.
+2. Enter your AP credentials and click the **Download Configuration** button. 
+3. A file named **WIFI.CFG** (text) file is downloaded to the host PC. 
+4. Drag and drop the file to the **CURIOSITY drive** to update the Wi-Fi credentials of the board.
+5. Reboot the device.
+6. **Fast Blinking BLUE LED** indicates connecting to local AP and **solid BLUE LED** indicates connection is successful.
 
-1.  Light Blue
+**Note**: Any information entered in the SSID and password fields is not transmitted over the web or to the Microchip or AWS servers. Instead, the information is used locally (within the browser) to generate the **WIFI.CFG** file.
 
+#### 2.2.2 Via Soft AP <a name="chapter2.2.2"></a>
+In AP mode, WFI32-IoT board can be provisioned using either a dedicated Mobile app or any socket client app on PC (i.e Python) or Mobile phone.
 
-## Programming the precompiled hex file or Application Example {#PROGRAMMING-THE-PRECOMPILED-HEX-FILE-OR-APPLICATION-EXAMPLE .section}
+#### Using Microchip Wi-Fi Provisioning app
+1. Download **Microchip Wi-Fi Provisioning** Mobile phone application for [Android](https://play.google.com/store/apps/details?id=com.microchip.wifiapplication&hl=en_US&gl=US) or for [iOS](https://apps.apple.com/us/app/wi-fi-provisioning/id1553255731).
+2. To enter SoftAP mode, hold the **SW1** push button for most of the power up time.
+3. **Slow Blinking BLUE LED** indicates Soft AP is available.
+5. Using the Mobile phone or tablet, connect to the **WFI32-IoT** AP. 
+6. Open **Microchip Wi-Fi Provisioning** Mobile phone application and press **CONNECT**.
 
-**Programming the hex file using MPLABX IPE**
+<img src="resources/media/mobileApp1.png" width="240"/>
 
-1.  Precompiled Hex file is located in "<Harmony Content Path\>\\wireless\_apps\_pic32cxbz2\_wbz45\\apps\\ble\\building\_blocks\\peripheral\\peripheral\_conn\\hex" folder
+7. Mobile app doesn't currently have native support for Wi-Fi provisioning for WPA3 enabled APs. If your AP security mode is WPA3, please jump to [step 14](#step14).
+8. List of available APs is shown. You can press **SCAN** button to refresh.
 
-2.  Follow the steps mentioned [here](https://microchipdeveloper.com/ipe:programming-device)
+**Note**: For iPhone/iPad, you have to provide your own AP credentials as **SCAN** function is not supported due to iOS limitation.
 
+**Note**: Make sure you have location service in your phone enabled. Location service is needed by the application to be able to fetch Wi-Fi scan results (Android only), AP name and default Gateway.
 
-**Caution:** Users should choose the correct Device and Tool information
+<img src="resources/media/mobileApp2.png" width="240"/>
 
-**Programming the Application using MPLABX IDE**
+9. Choose one of the scanned APs or provide your own AP credentials. Data provided is sent to the WFI32-IoT board as you press **SEND**. 
 
-1.  Follow steps mentioned in of [Running a Precompiled Example](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-EA74172C-595E-4A34-B359-D42EE443F0EC) document
+<img src="resources/media/mobileApp3.png" width="240"/>
+<img src="resources/media/mobileApp4.png" width="240"/>
 
-2.  Open and program the Application Example "peripheral\_conn.x" located in "<Harmony Content Path\>\\wireless\_apps\_pic32cxbz2\_wbz45\\apps\\ble\\building\_blocks\\peripheral\\peripheral\_conn\\firmware" using MPLABX IDE
+10. Go back in the app and press **YES** when prompted so that the WFI32-IoT board applies the new credentials.
 
-
-<Harmony Content Path\> [how to find what is my Harmony Content Path](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-A55E9342-CE44-4A91-86BB-FEC6706FCD1C)
-
-## Demo Description {#DEMO-DESCRIPTION .section}
-
-This Application Example enables users to transmit Connectable and Scannable Undirected BLE Advertisements.On reset demo will print "Advertising" on a terminal emulator like TeraTerm, this denotes start of advertisements. Central device scanning these advertisements can issue connection request and get connected with this device. Upon connection demo prints "Connected" message on terminal window
-
-## Testing {#TESTING .section}
-
-Connect the WBZ451 Curiosity board to PC, program the precompiled hex file or application example as mentioned. Open TeraTerm @ \(Speed: 115200, Data: 8-bit, Parity: none, stop bits: 1 bit, Flow control: none\). Reset the board. Upon reset, "Advertising" message is displayed on the TeraTerm. User can open the LightBlue App on Smartphone to scan for Advertisements. Device with device name "Microchip" will appear.
-
-![](media/GUID-0BB10F7A-1CA9-4D6C-9474-B48063466B0E-low.png "")
-
-Select the device to get connected, after successful connection user can view the advertisement data.
-
-![](media/GUID-51617AC8-5266-45A2-88A5-93372201F92F-low.png "")
-
-Terminal output
-
-![](media/GUID-015BB5D7-D6D0-4E7D-9A2D-3292AD8E116D-low.png)
-
-Users can use another WBZ451 Curiosity Board configured as [BLE Connection\(central\)](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-7C948236-7D8E-45CA-9511-AB244B44BE64) instead of using a Smartphone App
-
-## Developing this Application from scratch using MPLAB Code Configurator {#DEVELOPING-THIS-APPLICATION-FROM-SCRATCH-USING-MPLAB-CODE-CONFIGURATOR .section}
-
-This section explains the steps required by a user to develop this application example from scratch using MPLABx Code Configurator
-
-**Tip:** New users of MPLAB Code Configurator are recommended to go through the [overview](https://onlinedocs.microchip.com/pr/GUID-1F7007B8-9A46-4D03-AEED-650357BA760D-en-US-6/index.html?GUID-B5D058F5-1D0B-4720-8649-ACE5C0EEE2C0).
-
-1.  Create a new MCC Harmony Project -- [link](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-B86E8493-D00D-46EF-8624-D412342147F0) for instructions
-
-2.  Import component configuration --This step helps users setup the basic components and configuration required to develop this application. The imported file is of format .mc3 and is located in the path "<Harmony Content Path>\wireless_apps_pic32cxbz2_wbz45\apps\ble\building_blocks\peripheral\peripheral_conn\firmware\peripheral_conn.X". Users should follow the instructions mentioned [here](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-F8FE2886-8A2C-4FC0-9956-C094CE44D162) to import the component configuration.
-
-**Tip:** Import and Export functionality of Harmony component configuration will help users to start from a known working setup of MCC configuration
-
-1.  Accept Dependencies or satisfiers, select "Yes"
-
-2.  Verify if the Project Graph window has all the expected configuration
-
-    ![](media/GUID-BE31CC3C-C54C-4BC3-84A0-6CC0731E77F3-low.png "")
-
-
-## Verify Advertisement and Connection Configuration {#VERIFY-ADVERTISEMENT-AND-CONNECTION-CONFIGURATION .section}
-
-1.  Select **BLE\_Stack** component in project graph
-
-    ![](media/GUID-8B4AB762-1809-4FBD-8799-5930C918DBE2-low.png "")
-
-
-## Generate Code {#GENERATE-CODE-LINK-FOR-INSTRUCTIONS .section}
-
-Instructions on[how to Generate Code](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-9C28F407-4879-4174-9963-2CF34161398E)
-
-## Files and Routines Automatically generated by the MCC {#FILES-AND-ROUTINES-AUTOMATICALLY-GENERATED-BY-THE-MCC .section}
-
-After generating the program source from MCC interface by clicking Generate Code, the BLE configuration can be found in the following project directories
-
-![](media/GUID-084D2DCD-2D12-4756-B995-E85612E420BA-low.png)
-
-The [OSAL](http://ww1.microchip.com/downloads/en/DeviceDoc/MPLAB%20Harmony%20OSAL%20Libraries%20Help%20v2.06.pdf), RF System, BLE System initialization routine executed during program initialization can be found in the project files. This initialization routine is automatically generated by the MCC
-
-![](media/GUID-C6F90FEE-3E53-4160-8FB6-DF96A1F41B0B-low.png)
-
-The BLE stack initialization routine excuted during Application Initialization can be found in project files. This intitialization routine is automatically generated by the MCC. This call initializes and configures the GAP, GATT, SMP, L2CAP and BLE middleware layers.
-
-![](media/GUID-692108AA-0A28-4831-B8FD-ECEA2BD9B722-low.png "")
-
-Autogenerated, advertisement data format
-
-![](media/GUID-48486BE3-FAEE-40E1-A324-54D3BFF8B8DA-low.png)
-
-|**Source Files**|**Usage**|
-|----------------|---------|
-|app.c|Application State machine, includes calls for Initialization of all BLE stack \(GAP,GATT, SMP, L2CAP\) related component configurations|
-|app\_ble\\app\_ble.c|Source Code for the BLE stack related component configurations, code related to function calls from app.c|
-|app\_ble\\app\_ble\_handler.c|All GAP, GATT, SMP and L2CAP Event handlers|
-
-> **Tip:** app.c is autogenerated and has a state machine based Application code sample, users can use this template to develop their application \|
-
-**Header Files**
-
--   ble\_gap.h- This header file contains BLE GAP functions and is automatically included in the app.c file
-
-
-**Function Calls**
-
-MCC generates and adds the code to initialize the BLE Stack GAP, GATT, L2CAP and SMP in *APP\_BleStackInit\(\)* function
-
--   APP\_BleStackInit\(\) is the API that will be called inside the Applications Initial State -- APP\_STATE\_INIT in app.c
-
-
-## User Application Development {#USER-APPLICATION-DEVELOPMENT .section}
-
-**Include**
-
--   user action is required as mentioned [here](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-99583057-8B1A-42F2-84E8-CFC7717FA5D1)
-
--   definitions.h in all the files where UART will be used to print debug information
-
-
-> Tip: definitions.h is not specific to just UART peripheral, instead it should be included in all application source files where peripheral functionality will be exercised
-
-**Set PUBLIC Device Address**
-
--   BLE\_GAP\_SetDeviceAddr\(&devAddr\);
-
-
-```
-    BLE_GAP_Addr_T devAddr;
-    devAddr.addrType = BLE_GAP_ADDR_TYPE_PUBLIC;
-    devAddr.addr[0] = 0xA1;
-    devAddr.addr[1] = 0xA2;
-    devAddr.addr[2] = 0xA3;
-    devAddr.addr[3] = 0xA4;
-    devAddr.addr[4] = 0xA5;
-    devAddr.addr[5] = 0xA6;
-
-    // Configure device address
-    BLE_GAP_SetDeviceAddr(&devAddr);
+<img src="resources/media/mobileApp6.png" width="240"/>
+
+12. Device should automatically reboot.
+13. **Fast Blinking BLUE LED** indicates connecting to local AP and **solid BLUE LED** indicates connection is successful.
+
+##### For WPA3-enabled AP: <a name="step14"></a>
+14. Navigate from **Wi-Fi** tab to **OTHER** tab and type in the following string without the double quotations: "*apply,ssid,password,4*". Please replace *ssid* with your AP name and *password* with your AP password. Press **SEND** when done.
+	
+
+<img src="resources/media/mobileApp7.png" width="240"/>
+	
+15. Go back in the app and press **YES** when prompted so that the WFI32-IoT board applies the new credentials.
+	
+
+<img src="resources/media/mobileApp8.png" width="240"/>
+
+**Note**: WFI32-IoT board will NOT apply/use provided credentials unless you go back in the app. This gives you the chance to keep sending new credentials or correct wrongly provided ones as long as you didn't go back in the app.
+
+#### Using any socket client app
+The **Microchip Wi-Fi provisioning** app shown above is actually using a TCP client behind the scenes. The TCP client connectes to WFI32-IoT TCP server and sends properly fomratted AP credentials. 
+1. To enter SoftAP mode, hold the **SW1** push button for most of the power up time.
+2. **Slow Blinking BLUE LED** indicates Soft AP is available.
+3. Using a PC, Mobile phone, tablet or any device that's Wi-Fi and TCP client capabale, connect to the **WFI32-IoT** AP.
+4. In the example we are showing below, a Python 2.7 based TCP client is used to connect to WFI32-IoT TCP server.
+
+```python
+import socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# WFI32-IoT board runs an AP interface with IP address 192.168.1.1 and a TCP server on port 80
+server_address = ('192.168.1.1', 80)
+# Connect to the TCP socket
+sock.connect(server_address)
+# Send AP credentials over the connected socket to the WFI32-IoT board
+# Replace 'ssid' with your AP SSID and 'password' with your AP password 
+# Replace 'security' with proper value relevant to your AP security mode:
+#0:Open | 1: WAP/WPA2 | 2:WEP | 3:WPA3 | 4:Enterprise
+sock.sendall('apply,ssid,security,password,NULL')
+# Send a 'finish' string over the socket to inform WFI32-IoT board to apply the passed credentials
+sock.sendall('finish')
 ```
 
-![](media/GUID-0179C471-E8B5-4370-B4B5-B7C03B33A15D-low.png)
+### 2.3 Visualizing Cloud Data in Real Time <a name="chapter2.3"></a>
 
-**Start Advertisement**
+#### Viewing the published messages
+<img src="resources/media/webpage Indicators.png" width="720"/>
 
--   BLE\_GAP\_SetAdvEnable\(0x01, 0\);
+1. After connecting to an access point, WFI32-IoT board will try to connect to Microchip AWS Sandbox account which is indicated by a **blinking GREEN LED**.
+2. Once connection to cloud is successful, **GREEN LED** will turn solid.
+3. Go to demo webpage (can always be reached out using the file **clickme.html**).
+4. The webpage will show a real-time graph of the data captured from the on-board light and temperature sensors.
+5. The on board **YELLOW LED** will blink for 300 ms for each message published successfully to the cloud.
 
+<img src="resources/media/webpageGraphs.png" width="720"/>
 
-![](media/GUID-CA0439E0-0BBF-4DD2-A945-47DCD2C922D9-low.png)
+**Note**: Take note of your Thing Name as it's going to be needed for registering the device for Alexa Voice Control in [section 2.4](#chapter2.4).
 
-**Connected & Disconnected Events**
+**Note**: Temperature reported is the PCB temperature not ambient temperature. Accordingly, you may notice always a number that's above your room temperature.
 
--   All the possible GAP, GATT, SMP and L2CAP Event handlers are available in file app\_ble\_handler.c, users can implement application code to denote Connection State here.
+#### Sending messages to the board
+1. Scroll down to **What's Next** section in the webpage.
+2. Select **Implement a Cloud-Controlled Actuator** to demonstrate cloud performed behaviors.
+3. Click on **See more**  then Scroll down the **Control Your Device** panel.
 
+<img src="resources/media/webpageToggle.png" width="720"/>
 
-![](media/GUID-C86FF099-CBC3-4506-8290-742B24386B17-low.png)
+5. Click on **Send to device** to send **Toggle** button value. 
+6. The **YELLOW LED** will remain on/off for 2 seconds when **Toggle** button is selected/unselected, respectively. After the 2 seconds, the **YELLOW LED** will go back to its normal functionality; blinking on each successful message published to the cloud.
 
-Users can exercise various other BLE Advertisement functionalities by using [BLE Stack API](https://onlinedocs.microchip.com/pr/GUID-C5EAF60E-9124-427C-A0F1-F2DBE662EA92-en-US-2/index.html)
+**Note**: Because Toggle manipulates the desired state, the state must be changed to observe the behavior.
 
-## Where to go from here {#WHERE-TO-GO-FROM-HERE .section}
+### 2.4 Voice Control <a name="chapter2.4"></a>
+Please note that supported browsers includes Google Chrome, Mozilla Firefox, Safari, and Microsoft Edge while Internet Explorer is not supported. Please also note that only devices registered to the Microchip Cloud account can be registered for voice control and controlled via the voice skills. In case of registration errors, please contact [Microchip support](http://microchip.com/support)
 
--   [BLE Transparent UART](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-07EC83B7-CC28-4C55-8634-4B7F56A9DB36)
+<img src="resources/media/voiceReg1.png" width="1080"/>
 
+1. Create an account and log-in to the [device registration page](https://microchiptech.github.io/mchpiotvoice/). You can also reach out to this page using the file **voice.html** on the **CURIOSITY drive**.
 
-**Parent topic:**[Peripheral](https://onlinedocs.microchip.com/pr/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-2/index.html?GUID-B3B46369-F5B4-401B-8405-658BE34988F4)
+<img src="resources/media/voiceReg2.png" width="480"/>
+
+2. Enter your thing name and a friendly name and claim your device by registering it. Thing name can be found at the top of the demo web page just above the temperature and light graphs.
+
+<img src="resources/media/voiceReg3.png" width="720"/>
+
+3. Successfully claimed devices will show up in the device listing in the left side panel.
+4. Using Amazon Alexa® app, enable the skill '<img src="resources/media/skillIcon.png" width="30" /> [Microchip IoT](https://www.amazon.com/gp/product/B08B5THZH5?ref&ref=cm_sw_em_r_as_dp_iuhtblwcTlYL4)' and add the dev board as a smart home device.   
+5. You can now control the on-board **YELLOW LED** with voice commands using the friendly name provided while claiming the device earlier:
+> Alexa, turn on the myCuriosity
+6. The **YELLOW LED** will remain on/off for 2 Seconds based on the voice command.
+   
+
+**Note**: You can find out more information about connecting a smart home device to Alexa from [this link](http://tinyurl.com/alexa-smart-home)
+
+**Note**: Supported browsers include Google Chrome, Mozilla Firefox, Safari, and Microsoft Edge while Internet Explorer is not supported. 
+
+**Note**: Only devices registered to the Microchip Cloud account can be registered for voice control and controlled via the voice skills. In case of registration errors, please contact [Microchip support](http://microchip.com/support)
+
+## 3. User Commands <a name="Chapter3"></a>
+When connecting WFI32-IoT board to a PC using a standard micro-USB cable, it enumerates as a USB MSD (Mass Storage Device) in addition to two other virtual COM ports reflecting UART1 and UART3 of the module where:
+* UART1 is used for application debug logs.
+* UART3 is used for Wi-Fi FW and AWS C SDK logs.
+
+UART1 supports a set of user commands via command line as follows (more info about commands usage are available under [Deep Dive Guide](https://github.com/MicrochipTech/WFI32-IoT/blob/main/HowItWorks.md#chapter10)):
+1. "**rssi**": prints current connection RSSI value.
+2. "**unixtime**": prints current UNIX time.
+3. "**debug <debug_level>**": sets application debug level (accepted values are 0 through 4).
+4. "**rtcc_freq <rtcc_freq>**": sets RTCC frequency (check command help for accetped values).
+5. "**power_mode <power_mode>**": sets power save mode (accepted values are 0 to 5).
+6. "**reboot**": Execute a system reboot.
+
+**Note**: UART1 and UART3 settings should be 115200 8N1.
+
+## 4. Want To Know More? <a name="chapter4"></a>
+
+Curious to learn more? ..
+- Check out our **[Deep Dive Guide](https://github.com/MicrochipTech/WFI32-IoT/blob/main/HowItWorks.md)** to dive behind the scenes, learn how Connectivity, Security and Cloud are tied together and experience how smooth it is to migrate the demo to your own cloud instance. 
+- We have gathered some FAQs and troubleshooting tips for you under the **[FAQ and Troubleshooting Page](https://github.com/MicrochipTech/WFI32-IoT/blob/main/FAQ.md)**. 
+- Refer to WFI32-IoT board **[product page](https://www.microchip.com/en-us/development-tool/ev36w50a)** and **[HW user guide](https://ww1.microchip.com/downloads/aemDocuments/documents/WSG/ProductDocuments/UserGuides/EV36W50A-WFI32-IoT-Board-Users-Guide-DS50003262.pdf)**. 
+- Check out **[WFI32E01PC module Product page](https://www.microchip.com/wwwproducts/en/WFI32E01PC)** for tips, guides, knowledge base article, code examples and further more!
+- Check out **[Curisoity Board](https://www.microchip.com/developmenttools/ProductDetails/PartNO/EV12F11A)**; another evaluation board for WFI32E01PC module where you can have access to more module interfaces (i.e Ethernet) and more pins for prototyping. 
+- A very similar and exciting demo for Curiosity Board is available **[here](https://github.com/MicrochipTech/PIC32MZW1_Curiosity_OOB)**.
