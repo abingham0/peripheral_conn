@@ -38,11 +38,11 @@
 				"category": "com.microchip.portal.fileRef",
 				"content": {
 					"metaDataVersion": "1.0.0",
-					"fileName": "./../readme.md",
+					"fileName": "./README.md",
 					"mimeType": "text/markdown"
 				}
 			},
-			"hexFileNamePath": "./../../hex/peripheral_conn.hex"
+			"hexFileNamePath": "./hex/peripheral_conn.hex"
 		}
 	}
 }
