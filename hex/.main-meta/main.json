@@ -1,0 +1,48 @@
+{
+	"metaDataVersion": "1.0.0",
+	"category": "com.microchip.hex.project",
+	"content": {
+		"metaDataVersion": "1.0.0",
+		"name": "com.microchip.mcu32.mplabx.project.wireless_apps_pic32cxbz2_wbz45_peripheral_conn",
+		"version": "1.0.0",
+		"displayName": "BLE Peripheral Connection Application",
+		"shortDescription": "This example application used to enable advertisements and connection on WBZ451 Curiosity board using MPLAB Code Configurator(MCC) BLE Advertisement is Broadcasting of small packets to peer devices.",
+		"device": {
+			"metaDataVersion": "1.0.0",
+			"category": "com.microchip.portal.contentRef",
+			"content": {
+				"metaDataVersion": "1.0.0",
+				"category": "com.microchip.device",
+				"name": "WBZ451",
+				"versionRange": "*"
+			}
+		},
+		"board": {
+			"metaDataVersion": "1.0.0",
+			"category": "com.microchip.portal.boardRef",
+			"content": {
+				"metaDataVersion": "1.0.0",
+				"category": "com.microchip.board",
+				"name": "WBZ451_CURIOSITY_BOARD",
+				"versions": "*"
+			}
+		},
+		"author": "Microchip",
+		"keywords": [
+			"BLE",
+            "wireless"
+		],
+		"additionalData": {
+			"longDescription": {
+				"metaDataVersion": "1.0.0",
+				"category": "com.microchip.portal.fileRef",
+				"content": {
+					"metaDataVersion": "1.0.0",
+					"fileName": "./../readme.md",
+					"mimeType": "text/markdown"
+				}
+			},
+			"hexFileNamePath": "./../../hex/peripheral_conn.hex"
+		}
+	}
+}
